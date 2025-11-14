@@ -333,7 +333,7 @@ module morse_code(
             4'hB: seg = 7'b0000011;
             4'hC: seg = 7'b1000110;
             4'hD: seg = 7'b0100001;
-            4'hE: seg = 7'b0000110;
+            4'hE: seg = 7'b0001100;
             4'hF: seg = 7'b1111111; //Space
             default: seg = 7'b1111111;
         endcase

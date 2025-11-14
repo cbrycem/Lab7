@@ -34,6 +34,9 @@ module translator(
             {3'd5, 5'b01111}: decoded = 4'h1; //1
             {3'd5, 5'b00111}: decoded = 4'h2; //2
             {3'd5, 5'b00011}: decoded = 4'h3; //3
+            {3'd4, 5'b00110}: decoded = 4'hE; //P
+            {3'd5, 5'b11111}: decoded = 4'h0; //0
+            {3'd3, 5'b00111}: decoded = 4'h0; //O
             default: decoded = 4'hF;
         endcase
     end 
