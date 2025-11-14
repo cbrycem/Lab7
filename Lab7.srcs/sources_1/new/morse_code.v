@@ -54,22 +54,22 @@ module morse_code(
         .clean({btnU_db, btnD_db, btnL_db, btnR_db})
     );
     
-    clk_gen U1 (.clk(clk), .rst(btnD), .clk_div(clkd));
+    clk_gen U1 (.clk(clk), .clk_div(clkd));
     
     reg [1:0] digit_select = 2'b00;     //This is to choose which of the 4 7-segs to push to
     
     always @(posedge clk) begin
         // simple edge detectors
-        btnL_prev <= btnL;
-        btnR_prev <= btnR;
-        btnD_prev <= btnD;
-        btnU_prev <= btnU;
+        btnL_prev <= btnL_db;
+        btnR_prev <= btnR_db;
+        btnD_prev <= btnD_db;
+        btnU_prev <= btnU_db;
     end
     
-    assign btnL_edge = btnL & ~btnL_prev;
-    assign btnR_edge = btnR & ~btnR_prev;
-    assign btnD_edge = btnD & ~btnD_prev;
-    assign btnU_edge = btnU & ~btnU_prev;
+    assign btnL_edge = btnL_db & ~btnL_prev;
+    assign btnR_edge = btnR_db & ~btnR_prev;
+    assign btnD_edge = btnD_db & ~btnD_prev;
+    assign btnU_edge = btnU_db & ~btnU_prev;
     
     always @(posedge clk) begin
     
@@ -115,6 +115,81 @@ module morse_code(
             morse2 <= 2'b00;
             morse1 <= 1'b0;
         end
+        
+        led <= 16'h0000;
+        case (morse_enable)
+            5'b11110: begin 
+                if (morse1 == 0)
+                    led[0] <= 1'b1;
+                else
+                    led[1:0] <= 2'b11;
+            end
+            5'b11101: begin 
+                if (morse2[1] == 1'b0)
+                    led[0] <= 1'b1; 
+                else
+                    led[1:0] <= 2'b11;
+                if (morse2[0] == 1'b0)
+                    led[3] <= 1'b1;
+                else
+                    led[4:3] <= 2'b11;
+            end
+            5'b11011: begin 
+                if (morse3[2] == 1'b0)
+                    led[0] <= 1'b1; 
+                else
+                    led[1:0] <= 2'b11;
+                if (morse3[1] == 1'b0)
+                    led[3] <= 1'b1;
+                else
+                    led[4:3] <= 2'b11;
+                if (morse3[0] == 1'b0)
+                    led[6] <= 1'b1;
+                else
+                    led[7:6] <= 2'b11;
+            end
+            5'b10111: begin 
+                if (morse4[3] == 1'b0)
+                    led[0] <= 1'b1; 
+                else
+                    led[1:0] <= 2'b11;
+                if (morse4[2] == 1'b0)
+                    led[3] <= 1'b1;
+                else
+                    led[4:3] <= 2'b11;
+                if (morse4[1] == 1'b0)
+                    led[6] <= 1'b1;
+                else
+                    led[7:6] <= 2'b11;
+                if (morse4[0] == 1'b0)
+                    led[9] <= 1'b1;
+                else
+                    led[10:9] <= 2'b11;
+            end
+            5'b01111: begin 
+                if (morse5[4] == 1'b0)
+                    led[0] <= 1'b1; 
+                else
+                    led[1:0] <= 2'b11;
+                if (morse5[3] == 1'b0)
+                    led[3] <= 1'b1;
+                else
+                    led[4:3] <= 2'b11;
+                if (morse5[2] == 1'b0)
+                    led[6] <= 1'b1;
+                else
+                    led[7:6] <= 2'b11;
+                if (morse5[1] == 1'b0)
+                    led[9] <= 1'b1;
+                else
+                    led[10:9] <= 2'b11;
+                if (morse5[0] == 1'b0)
+                    led[12] <= 1'b1;
+                else
+                    led[13:12] <= 2'b11;
+            end
+        endcase
+        
     end
     
     decoder U2 (.morse_enable(morse_enable), .morse5(morse5), .morse4(morse4), .morse3(morse3), .morse2(morse2), .morse1(morse1), .decoder_output(decoder_output));
@@ -127,81 +202,81 @@ module morse_code(
 //        morse_inputs[4] = {{(0){1'b0}}, morse5};
 //    end
     
-    always @(*) begin
-        led = 16'h0000;
-        case (morse_enable)
-            5'b11110: begin 
-                if (morse1 == 0)
-                    led[0] = 1'b1;
-                else
-                    led[1:0] = 2'b11;
-            end
-            5'b11101: begin 
-                if (morse2[1] == 1'b0)
-                    led[0] = 1'b1; 
-                else
-                    led[1:0] = 2'b11;
-                if (morse2[0] == 1'b0)
-                    led[3] = 1'b1;
-                else
-                    led[4:3] = 2'b11;
-            end
-            5'b11011: begin 
-                if (morse3[2] == 1'b0)
-                    led[0] = 1'b1; 
-                else
-                    led[1:0] = 2'b11;
-                if (morse3[1] == 1'b0)
-                    led[3] = 1'b1;
-                else
-                    led[4:3] = 2'b11;
-                if (morse3[0] == 1'b0)
-                    led[6] = 1'b1;
-                else
-                    led[7:6] = 2'b11;
-            end
-            5'b10111: begin 
-                if (morse4[3] == 1'b0)
-                    led[0] = 1'b1; 
-                else
-                    led[1:0] = 2'b11;
-                if (morse4[2] == 1'b0)
-                    led[3] = 1'b1;
-                else
-                    led[4:3] = 2'b11;
-                if (morse4[1] == 1'b0)
-                    led[6] = 1'b1;
-                else
-                    led[7:6] = 2'b11;
-                if (morse4[0] == 1'b0)
-                    led[9] = 1'b1;
-                else
-                    led[10:9] = 2'b11;
-            end
-            5'b01111: begin 
-                if (morse5[4] == 1'b0)
-                    led[0] = 1'b1; 
-                else
-                    led[1:0] = 2'b11;
-                if (morse5[3] == 1'b0)
-                    led[3] = 1'b1;
-                else
-                    led[4:3] = 2'b11;
-                if (morse5[2] == 1'b0)
-                    led[6] = 1'b1;
-                else
-                    led[7:6] = 2'b11;
-                if (morse5[1] == 1'b0)
-                    led[9] = 1'b1;
-                else
-                    led[10:9] = 2'b11;
-                if (morse5[0] == 1'b0)
-                    led[12] = 1'b1;
-                else
-                    led[13:12] = 2'b11;
-            end
-        endcase
-    end
+//    always @(posedge clk) begin
+//        led <= 16'h0000;
+//        case (morse_enable)
+//            5'b11110: begin 
+//                if (morse1 == 0)
+//                    led[0] <= 1'b1;
+//                else
+//                    led[1:0] <= 2'b11;
+//            end
+//            5'b11101: begin 
+//                if (morse2[1] == 1'b0)
+//                    led[0] <= 1'b1; 
+//                else
+//                    led[1:0] <= 2'b11;
+//                if (morse2[0] == 1'b0)
+//                    led[3] <= 1'b1;
+//                else
+//                    led[4:3] <= 2'b11;
+//            end
+//            5'b11011: begin 
+//                if (morse3[2] == 1'b0)
+//                    led[0] <= 1'b1; 
+//                else
+//                    led[1:0] <= 2'b11;
+//                if (morse3[1] == 1'b0)
+//                    led[3] <= 1'b1;
+//                else
+//                    led[4:3] <= 2'b11;
+//                if (morse3[0] == 1'b0)
+//                    led[6] <= 1'b1;
+//                else
+//                    led[7:6] <= 2'b11;
+//            end
+//            5'b10111: begin 
+//                if (morse4[3] == 1'b0)
+//                    led[0] <= 1'b1; 
+//                else
+//                    led[1:0] <= 2'b11;
+//                if (morse4[2] == 1'b0)
+//                    led[3] <= 1'b1;
+//                else
+//                    led[4:3] <= 2'b11;
+//                if (morse4[1] == 1'b0)
+//                    led[6] <= 1'b1;
+//                else
+//                    led[7:6] <= 2'b11;
+//                if (morse4[0] == 1'b0)
+//                    led[9] <= 1'b1;
+//                else
+//                    led[10:9] <= 2'b11;
+//            end
+//            5'b01111: begin 
+//                if (morse5[4] == 1'b0)
+//                    led[0] <= 1'b1; 
+//                else
+//                    led[1:0] <= 2'b11;
+//                if (morse5[3] == 1'b0)
+//                    led[3] <= 1'b1;
+//                else
+//                    led[4:3] <= 2'b11;
+//                if (morse5[2] == 1'b0)
+//                    led[6] <= 1'b1;
+//                else
+//                    led[7:6] <= 2'b11;
+//                if (morse5[1] == 1'b0)
+//                    led[9] <= 1'b1;
+//                else
+//                    led[10:9] <= 2'b11;
+//                if (morse5[0] == 1'b0)
+//                    led[12] <= 1'b1;
+//                else
+//                    led[13:12] <= 2'b11;
+//            end
+//        endcase
+//    end
     
     assign dp = 1'b1;       //Turn off decimal
 //    always @(posedge clk) begin
