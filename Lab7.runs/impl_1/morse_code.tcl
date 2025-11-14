@@ -1,5 +1,5 @@
 namespace eval ::optrace {
-  variable script "C:/Users/cbrycem/Desktop/Vivado/Lab0/Lab7/Lab7.runs/impl_1/morse_code.tcl"
+  variable script "C:/Users/cbrycem/Desktop/Vivado/Lab7/Lab7.runs/impl_1/morse_code.tcl"
   variable category "vivado_impl"
 }
 
@@ -108,12 +108,11 @@ set ACTIVE_STEP write_bitstream
 set rc [catch {
   create_msg_db write_bitstream.pb
   set_param chipscope.maxJobs 5
-  set_param synth.incrementalSynthesisCache C:/Users/cbrycem/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-23836-25STC151L02/incrSyn
+  set_param synth.incrementalSynthesisCache C:/Users/cbrycem/Desktop/.Xil/Vivado-3616-25STC155L02/incrSyn
   set_param checkpoint.writeSynthRtdsInDcp 1
-  set_param xicom.use_bs_reader 1
   set_param runs.launchOptions { -jobs 10  }
   open_checkpoint morse_code_routed.dcp
-  set_property webtalk.parent_dir C:/Users/cbrycem/Desktop/Vivado/Lab0/Lab7/Lab7.cache/wt [current_project]
+  set_property webtalk.parent_dir C:/Users/cbrycem/Desktop/Vivado/Lab7/Lab7.cache/wt [current_project]
 set_property TOP morse_code [current_fileset]
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }

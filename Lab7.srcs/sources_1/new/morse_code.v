@@ -34,17 +34,17 @@ module morse_code(
     
     wire clkd;
     wire [3:0] decoder_output;
-    reg [3:0] digit0;
-    reg [3:0] digit1;
-    reg [3:0] digit2;
-    reg [3:0] digit3;
+    reg [3:0] digit0 = 4'hF;
+    reg [3:0] digit1 = 4'hF;
+    reg [3:0] digit2 = 4'hF;
+    reg [3:0] digit3 = 4'hF;
     reg [4:0] morse_enable = 5'b11111;
     reg [4:0] morse5 = 5'b00000;
     reg [3:0] morse4 = 4'b0000;
     reg [2:0] morse3 = 3'b000;
     reg [1:0] morse2 = 2'b00;
     reg morse1 = 1'b0;
-    reg btnL_prev, btnR_prev, btnD_prev, btnU_prev;
+    reg btnL_prev = 0, btnR_prev = 0, btnD_prev = 0, btnU_prev = 0;
     wire btnL_edge, btnR_edge, btnD_edge, btnU_edge;
     wire btnU_db, btnD_db, btnL_db, btnR_db;
 
@@ -81,6 +81,7 @@ module morse_code(
             morse3 <= 3'b000;
             morse4 <= 4'b0000;
             morse5 <= 5'b00000;
+            led <= 16'h0000;
         end
         else if (btnL_edge) begin
             // dot
@@ -105,56 +106,104 @@ module morse_code(
     end
     
     decoder U2 (.morse_enable(morse_enable), .morse5(morse5), .morse4(morse4), .morse3(morse3), .morse2(morse2), .morse1(morse1), .decoder_output(decoder_output));
-    reg [4:0] morse_inputs [4:0];
-    always @(posedge clkd) begin
-        morse_inputs[0] = {{(4){1'b0}}, morse1};
-        morse_inputs[1] = {{(3){1'b0}}, morse2};
-        morse_inputs[2] = {{(2){1'b0}}, morse3};
-        morse_inputs[3] = {{(1){1'b0}}, morse4};
-        morse_inputs[4] = {{(0){1'b0}}, morse5};
-    end
+//    reg [4:0] morse_inputs [4:0];
+//    always @(posedge clkd) begin
+//        morse_inputs[0] = {{(4){1'b0}}, morse1};
+//        morse_inputs[1] = {{(3){1'b0}}, morse2};
+//        morse_inputs[2] = {{(2){1'b0}}, morse3};
+//        morse_inputs[3] = {{(1){1'b0}}, morse4};
+//        morse_inputs[4] = {{(0){1'b0}}, morse5};
+//    end
     
     always @(*) begin
+        led = 16'h0000;
         case (morse_enable)
             5'b11110: begin 
-            if (morse_inputs[0][0] == 0) begin
-                led[0] <= 1'b1; 
-                led[1] <= 1'b0; 
-            end
-            else begin
-                led[0] <= 1'b1;
-                led[1] <= 1'b1;
-            end
+                if (morse1 == 0)
+                    led[0] = 1'b1;
+                else
+                    led[1:0] = 2'b11;
             end
             5'b11101: begin 
-            if (morse_inputs[0][0] == 0) begin
-                led[0] <= 1'b1; 
-                led[1] <= 1'b0; 
+                if (morse2[1] == 1'b0)
+                    led[0] = 1'b1; 
+                else
+                    led[1:0] = 2'b11;
+                if (morse2[0] == 1'b0)
+                    led[3] = 1'b1;
+                else
+                    led[4:3] = 2'b11;
             end
-            else begin
-                led[0] <= 1'b1;
-                led[1] <= 1'b1;
+            5'b11011: begin 
+                if (morse3[2] == 1'b0)
+                    led[0] = 1'b1; 
+                else
+                    led[1:0] = 2'b11;
+                if (morse3[1] == 1'b0)
+                    led[3] = 1'b1;
+                else
+                    led[4:3] = 2'b11;
+                if (morse3[0] == 1'b0)
+                    led[6] = 1'b1;
+                else
+                    led[7:6] = 2'b11;
             end
+            5'b10111: begin 
+                if (morse4[3] == 1'b0)
+                    led[0] = 1'b1; 
+                else
+                    led[1:0] = 2'b11;
+                if (morse4[2] == 1'b0)
+                    led[3] = 1'b1;
+                else
+                    led[4:3] = 2'b11;
+                if (morse4[1] == 1'b0)
+                    led[6] = 1'b1;
+                else
+                    led[7:6] = 2'b11;
+                if (morse4[0] == 1'b0)
+                    led[9] = 1'b1;
+                else
+                    led[10:9] = 2'b11;
             end
-            5'b11011: begin morse_enable <= 5'b10111; morse4 <= {morse3, 1'b1}; end
-            5'b10111: begin morse_enable <= 5'b01111; morse5 <= {morse4, 1'b1}; end
-            5'b01111: begin morse_enable <= 5'b01111; morse5 <= {morse4, 1'b1}; end
+            5'b01111: begin 
+                if (morse5[4] == 1'b0)
+                    led[0] = 1'b1; 
+                else
+                    led[1:0] = 2'b11;
+                if (morse5[3] == 1'b0)
+                    led[3] = 1'b1;
+                else
+                    led[4:3] = 2'b11;
+                if (morse5[2] == 1'b0)
+                    led[6] = 1'b1;
+                else
+                    led[7:6] = 2'b11;
+                if (morse5[1] == 1'b0)
+                    led[9] = 1'b1;
+                else
+                    led[10:9] = 2'b11;
+                if (morse5[0] == 1'b0)
+                    led[12] = 1'b1;
+                else
+                    led[13:12] = 2'b11;
+            end
         endcase
     end
     
     assign dp = 1'b1;       //Turn off decimal
     always @(posedge clk) begin
         if(btnU_edge) begin
-            digit0 = decoder_output; //recombined_data[3:0];     //Set the new value to our 4 sets of bit
-            digit1 = digit0; //recombined_data[7:4];
-            digit2 = digit1; //recombined_data[11:8];
-            digit3 = digit2; //recombined_data[15:12];
-            morse_enable = 5'b11111;
-            morse5 = 5'b00000;
-            morse4 = 4'b0000;
-            morse3 = 3'b000;
-            morse2 = 2'b00;
-            morse1 = 1'b0;
+            digit0 <= decoder_output; //recombined_data[3:0];     //Set the new value to our 4 sets of bit
+            digit1 <= digit0; //recombined_data[7:4];
+            digit2 <= digit1; //recombined_data[11:8];
+            digit3 <= digit2; //recombined_data[15:12];
+            morse_enable <= 5'b11111;
+            morse5 <= 5'b00000;
+            morse4 <= 4'b0000;
+            morse3 <= 3'b000;
+            morse2 <= 2'b00;
+            morse1 <= 1'b0;
         end
     end
     

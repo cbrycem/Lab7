@@ -25,7 +25,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/cbrycem/Desktop/Vivado/Lab0/Lab7/Lab7.runs/impl_1'
+HD_PWD='C:/Users/cbrycem/Desktop/Vivado/Lab7/Lab7.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

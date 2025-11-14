@@ -1,7 +1,7 @@
-Running: xsim.dir/morse_code_tb_behav/xsimk.exe -simmode gui -wdb morse_code_tb_behav.wdb -simrunnum 0 -socket 49838
+Running: xsim.dir/morse_code_tb_behav/xsimk.exe -simmode gui -wdb morse_code_tb_behav.wdb -simrunnum 0 -socket 61891
 Design successfully loaded
-Design Loading Memory Usage: 28772 KB (Peak: 28772 KB)
+Design Loading Memory Usage: 30012 KB (Peak: 30012 KB)
 Design Loading CPU Usage: 437 ms
 Simulation completed
-Simulation Memory Usage: 29804 KB (Peak: 29804 KB)
-Simulation CPU Usage: 468 ms
+Simulation Memory Usage: 30932 KB (Peak: 30932 KB)
+Simulation CPU Usage: 483 ms
