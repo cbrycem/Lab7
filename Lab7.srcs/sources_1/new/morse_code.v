@@ -103,6 +103,18 @@ module morse_code(
                 5'b10111: begin morse_enable <= 5'b01111; morse5 <= {morse4, 1'b1}; end
             endcase
         end
+        else if(btnU_edge) begin
+            digit0 <= decoder_output; //recombined_data[3:0];     //Set the new value to our 4 sets of bit
+            digit1 <= digit0; //recombined_data[7:4];
+            digit2 <= digit1; //recombined_data[11:8];
+            digit3 <= digit2; //recombined_data[15:12];
+            morse_enable <= 5'b11111;
+            morse5 <= 5'b00000;
+            morse4 <= 4'b0000;
+            morse3 <= 3'b000;
+            morse2 <= 2'b00;
+            morse1 <= 1'b0;
+        end
     end
     
     decoder U2 (.morse_enable(morse_enable), .morse5(morse5), .morse4(morse4), .morse3(morse3), .morse2(morse2), .morse1(morse1), .decoder_output(decoder_output));
@@ -192,20 +204,20 @@ module morse_code(
     end
     
     assign dp = 1'b1;       //Turn off decimal
-    always @(posedge clk) begin
-        if(btnU_edge) begin
-            digit0 <= decoder_output; //recombined_data[3:0];     //Set the new value to our 4 sets of bit
-            digit1 <= digit0; //recombined_data[7:4];
-            digit2 <= digit1; //recombined_data[11:8];
-            digit3 <= digit2; //recombined_data[15:12];
-            morse_enable <= 5'b11111;
-            morse5 <= 5'b00000;
-            morse4 <= 4'b0000;
-            morse3 <= 3'b000;
-            morse2 <= 2'b00;
-            morse1 <= 1'b0;
-        end
-    end
+//    always @(posedge clk) begin
+//        if(btnU_edge) begin
+//            digit0 <= decoder_output; //recombined_data[3:0];     //Set the new value to our 4 sets of bit
+//            digit1 <= digit0; //recombined_data[7:4];
+//            digit2 <= digit1; //recombined_data[11:8];
+//            digit3 <= digit2; //recombined_data[15:12];
+//            morse_enable <= 5'b11111;
+//            morse5 <= 5'b00000;
+//            morse4 <= 4'b0000;
+//            morse3 <= 3'b000;
+//            morse2 <= 2'b00;
+//            morse1 <= 1'b0;
+//        end
+//    end
     
     always @(posedge clkd) begin       //Assign our digit_select
         digit_select = digit_select + 1;

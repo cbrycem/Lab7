@@ -108,8 +108,8 @@ set ACTIVE_STEP write_bitstream
 set rc [catch {
   create_msg_db write_bitstream.pb
   set_param chipscope.maxJobs 5
-  set_param synth.incrementalSynthesisCache C:/Users/cbrycem/Desktop/.Xil/Vivado-3616-25STC155L02/incrSyn
   set_param checkpoint.writeSynthRtdsInDcp 1
+  set_param xicom.use_bs_reader 1
   set_param runs.launchOptions { -jobs 10  }
   open_checkpoint morse_code_routed.dcp
   set_property webtalk.parent_dir C:/Users/cbrycem/Desktop/Vivado/Lab7/Lab7.cache/wt [current_project]
